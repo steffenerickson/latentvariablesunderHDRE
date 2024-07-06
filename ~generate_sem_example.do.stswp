@@ -9,7 +9,9 @@ clear all
 frame reset 
 include generate_sem.do
 
+//----------------------------------------------------------------------------//
 // Generate Data
+//----------------------------------------------------------------------------//
 global factor1 s1 s2          // s skills 
 global factor2 r1 r2 r3 r4    // r rater 
 global factor3 l1 l2 l3 l4    // l lesson                
@@ -47,6 +49,9 @@ mata st_matrix("Sigma",Sigma)
 mata st_matrix("mu",mu)
 drawnorm ${all_combos}, cov(Sigma) means(mu) n(1000)
 
+//----------------------------------------------------------------------------//
+// Models 
+//----------------------------------------------------------------------------//
 // Correlated error model
 qui ds
 local list `r(varlist)'
@@ -69,7 +74,15 @@ sem (F1 -> s1*) (F2 -> s2*)
 di _b[/cov(F1,F2)]   // estimate
 mata Phi[2,1] 		 // true 
 
-//small simulation  
+// Observed mean score covariance 
+egen s1 = rowmean(s1*)
+egen s2 = rowmean(s2*)
+corr s1 s2 , cov // estimate
+mata Phi[2,1] 	 // true 
+
+//----------------------------------------------------------------------------//
+//Simulation  
+//----------------------------------------------------------------------------//
 forvalues i = 1/20 {
 clear 
 drawnorm ${all_combos}, cov(Sigma) means(mu) n(1000)
@@ -79,7 +92,6 @@ mat results = (nullmat(results),_b[/cov(F1,F2)])
 mata  mean(st_matrix("results")')
 mata Phi[2,1] 	// true 
 
- 
 
 
 

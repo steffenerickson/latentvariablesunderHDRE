@@ -182,7 +182,6 @@ end
 // Create a factor loading pattern matrix based on a list of strings 
 //----------------------------------------------------------------------------//
 
-
 capture program drop loadingpattern
 prog loadingpattern, rclass
 	
@@ -246,7 +245,7 @@ end
 //----------------------------------------------------------------------------//
 mata
 real matrix edit_param_mat(real matrix loadingmat,
-					real scalar set1to1, // option finds the first nonzero element and replace subsequent non-zero elements with random numbers
+					real scalar set1to1, // option finds the first nonzero element to replace as 1 and replaces subsequent non-zero elements with random numbers
 					real scalar lower, 
 					real scalar upper) 
 {						 			

@@ -4,7 +4,8 @@
 // Author : Steffen Erickson
 // Date   : 6/10/24
 //----------------------------------------------------------------------------//
-mata: mata clear 
+
+
 //----------------------------------------------------------------------------//
 // Generates Structural Equation Models using LISERAL notation and 
 // Equations from Bollen, 1989

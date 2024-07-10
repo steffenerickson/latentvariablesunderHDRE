@@ -4,8 +4,6 @@
 // Author : Steffen Erickson
 // Date   : 6/10/24
 //----------------------------------------------------------------------------//
-
-
 //----------------------------------------------------------------------------//
 // Generates Structural Equation Models using LISERAL notation and 
 // Equations from Bollen, 1989
@@ -183,23 +181,7 @@ end
 //----------------------------------------------------------------------------//
 // Create a factor loading pattern matrix based on a list of strings 
 //----------------------------------------------------------------------------//
-mata
-string matrix list_to_mat(string scalar vars) 
-{
-	string rowvector 	varvec
-	string matrix 		varmat
-	real scalar 		factors,i
-	
-	varvec = tokens(vars)
-	factors = rowsum(ustrwordcount(ustrsplit(varvec[1],"_")))
-	varmat = J(cols(varvec),factors,"")
-	for (i=1;i<=length(varvec);i++) {
-		varmat[i,1...] = ustrsplit(varvec[i],"_")
-	}
-	return(varmat)
-}
-end
-// Create lambda matrix 
+
 capture program drop loadingpattern
 prog loadingpattern, rclass
 	
@@ -238,6 +220,23 @@ prog loadingpattern, rclass
 		return matrix loadingmat = `loadingmat'
 		return local vars `list'
 	}
+end
+
+mata
+string matrix list_to_mat(string scalar vars) 
+{
+	string rowvector 	varvec
+	string matrix 		varmat
+	real scalar 		factors,i
+	
+	varvec = tokens(vars)
+	factors = rowsum(ustrwordcount(ustrsplit(varvec[1],"_")))
+	varmat = J(cols(varvec),factors,"")
+	for (i=1;i<=length(varvec);i++) {
+		varmat[i,1...] = ustrsplit(varvec[i],"_")
+	}
+	return(varmat)
+}
 end
 
 //----------------------------------------------------------------------------//

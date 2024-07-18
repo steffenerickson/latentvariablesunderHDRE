@@ -83,19 +83,32 @@ mata Phi[2,1] 	 // true
 //Simulation  
 //----------------------------------------------------------------------------//
 forvalues i = 1/20 {
+preserve
 clear 
 drawnorm ${all_combos}, cov(Sigma) means(mu) n(1000)
 sem (F1 -> s1*) (F2 -> s2*) ,covstructure(e._OEn, fixed(Theta_x))
 mat results = (nullmat(results),_b[/cov(F1,F2)])
+restore 
 }
 mata  mean(st_matrix("results")')
 mata Phi[2,1] 	// true 
 
-
-
-
-
-
+//----------------------------------------------------------------------------//
+// Factor Analysis on Error Structure  
+//----------------------------------------------------------------------------//
+sem (F1 -> s1*) (F2 -> s2*) ,covstructure(e._OEn, fixed(Theta_x))
+estat framework 
+mat Psi = r(Psi)
+local rownames1 : rowfullnames Psi
+local rownames2 : subinstr local rownames1  "Observed:e." "", all
+foreach rowname of local rownames2 {
+	local rownames3 `"`rownames3'"`rowname'""'
+}	
+mat rownames Psi = `rownames3'
+mat colnames Psi = `rownames3'
+factormat Psi, n(1000) 
+rotate, varimax 
+loadingplot, factors(7)  combined 
 
 
 
